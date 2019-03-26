@@ -1,19 +1,45 @@
-import pandas as pd
-from oversized_pancake_flipper.modules.models.pancake_row import PancakeRow
+import sys
 
-
-small_input = '../input_files/A-large-practice.in'
+from modules.models.pancake_row import PancakeRow
 
 class FileReader:
 
     def read_input(self, input_file):
-        read_input = pd.read_csv(input_file)
-        test_cases = read_input[0]
-        for x in range(test_cases):
-            input_row = read_input[x + 1]
+        """
+        takes in input file and creates pancake objects with pancake string and flipper size stored on objects
+        :return array of pancake objects
+        """
+
+        input_info = self.get_num_test_cases(input_file)
+
+        num_test_cases = int(input_info[0])
+
+        pancake_objects = []
+
+        for x in range(num_test_cases):
+            #row infor, has pancakes string and k
+            input_row = input_info[x + 1]
             input_row_arr = input_row.split(' ')
+
+            #string representing correct(+) and incorrect(-) pancakes
             pancake_string = input_row_arr[0]
-            flipper_size = input_row_arr[1]
+
+            #width of flipper
+            flipper_size = int(input_row_arr[1])
+
+            #create object for pancake
             pancake_info = PancakeRow(pancake_string, flipper_size)
 
-        return test_cases
+            #store pancake objects in array
+            pancake_objects.append(pancake_info)
+
+        return pancake_objects
+
+
+    def get_num_test_cases(self, input_file):
+        with open(input_file, 'r') as i:
+            lines = i.readlines()
+
+        test_cases = lines[0]
+
+        return lines
